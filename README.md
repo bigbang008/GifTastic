@@ -8,5 +8,4 @@ This project creates the **animal gif** via the existing animal name buttons or 
 * To pause the animation, just re-click it again.
 
 *Updated my portfolio*
-http://github.com - automatic!
 [GitHub](https://bigbang008.github.io/Basic-Portfolio/portfolio.html)
