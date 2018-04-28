@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>GifTastic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+  
+</head>
+<style>
+    body {
+        background-color: blanchedalmond;
+    }
+    .left {
+        float: left;
+        margin-right: 10px;
+    }
+</style>
+<body>
+    <div class="container">
+        <!-- Title -->
+        <div class="jumbotron jumbotron-fluid bg-success pt-3" style="width:100%;height:200px">
+            <div class="container">
+                <h1 class="display-4 font-weight-bold text-white "><i class="fas fa-camera-retro fa-2x"></i> ##GIF Animal Search</h1>
+            </div>
+        </div>
+
+        <!-- button -->
+        <div class="row">
+            <div class="col-md col-lg col-sm col-xs" id="animal-button">
+                
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+            <!-- show gif pictures -->
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+            <h1>Result<i class="fas fa-arrow-circle-down"></i></h1>  
+            <div id="result">
+
+            </div>            
+            </div>
+            <!-- add button -->
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group col-md col-lg col-sm col-xs wm-100">
+                                <label><i class="fas fa-search-plus"></i> Add an animal</label>
+                                <input type="text" class="form-control" id="inputWord" placeholder="Animal name">
+                            </div>
+                        </div>
+                            <button type="submit" class="btn btn-primary" id="add-animal">Submit</button>
+                    </form>                  
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    // the array of animal
+    var topics = ["cat", "dog", "bird", "ape", "tiger", "lion", "elephant", "kangaroo", "fox", "panda", "bear", "meerkat", "wolf", "deer", "giraffe", "polar bear","chipmunk"];
+    // the button generator function in the array
+    function createButton(){
+        // delete the prior contents before adding the new animal button
+        $("#animal-button").empty();
+        // loop through the array in order to generate button for each name
+        for (var i = 0; i < topics.length; i++){
+            var b = $("<button>");
+            b.addClass("btn btn-info mr-2 mb-2 gif");
+            b.attr("data-name", topics[i]);
+            b.text(topics[i]);
+            $("#animal-button").append(b);
+        }
+    } //end function
+
+    // generate a new button when adding a new animal is clicked
+    $("#add-animal").on("click", function(event){
+        event.preventDefault();
+        var addAnimal = $("#inputWord").val();
+        topics.push(addAnimal);
+        createButton();
+
+        console.log(topics); //to see it put a new word to the array 
+    });
+
+    //generate gif when the button is clicked
+    $("#animal-button").on("click", ".gif", function(){
+        event.preventDefault();
+        var animal = $(this).attr("data-name");
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+            animal + "&api_key=WF3Iic9O2w9QdraKDnPvZOMFIv5v82Em&limit=10";
+    
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    })
+        .then(function(res){
+            
+            var results = res.data;
+            console.log(results);
+            //creat a loop for images and ratings
+            for (var i = 0; i < results.length; i++){
+                var newDiv = $("<div>");
+                newDiv.addClass("left");
+                var p = $("<p>").text("Rating: " + results[i].rating);
+                var image = $("<img>");
+                image.addClass("picture");
+                image.attr("src", results[i].images.fixed_height_still.url);
+                image.attr("data-still", results[i].images.fixed_height_still.url);
+                image.attr("data-animate", results[i].images.fixed_height.url);
+                image.attr("data-state", "still");
+                
+                newDiv.append(p);
+                newDiv.append(image);
+                $("#result").append(newDiv);
+            }
+        });
+    });
+
+    
+    createButton(); //run
+    
+    $("#result").on("click", ".left .picture", function() {
+     
+     var state = $(this).attr("data-state");
+    //run the animation
+     if (state === "still") {
+     $(this).attr("src", $(this).attr("data-animate"));
+     $(this).attr("data-state", "animate");
+     } else {
+     $(this).attr("src", $(this).attr("data-still"));
+     $(this).attr("data-state", "still");
+     }
+ });
+    </script>
+    
+</body>
+</html>
