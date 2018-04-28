@@ -1,10 +1,7 @@
 # GifTastic
-This webpage creates the **animal gif** via the existing animal name buttons or your own new animal name.
+This project creates the **animal gif** via the existing animal name buttons or your own new animal name.
 
-
-
-What the project does
-Why the project is useful
-How users can get started with the project
-Where users can get help with your project
-Who maintains and contributes to the project
+##How users can get started with the project
+*You can click the existing animal name buttons on the top of the page to generate the gif
+*Alternatively, you can add a new animal name to generate a new button after that you click that button to receive the gif
+*the result will show 10 gif per time. In order to the animation, you need to click on the selected gif
